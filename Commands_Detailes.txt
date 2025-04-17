@@ -1,0 +1,16 @@
+Compile m.s (assembly code) using RISCV-32 architecture without any stdlib and using m.ld as the linker script
+We should have 2 files : m.s and m.ld for the command to work
+This command will create an executable with name main.elf
+>> riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld m.s -o main.elf
+
+Start a QEMU Virtual machine running main.elf and stopping at the very start itself with a TSP port to be looked into the virtual machine through gdb
+>> qemu-system-riscv32 -S -M virt -nographic -bios none -kernel main.elf -gdb tcp::1234
+
+Start GDB at the QEMU port with breakpoint on the _start instruction
+>> gdb-multiarch main.elf -ex "target remote localhost:1234" -ex "break _start" -ex "continue" -q
+
+To convert the main.elf executable into binary machine language opcode
+>> riscv64-unknown-elf-objcopy -O binary main.elf main.bin
+
+To see the content of this binary machine code
+>> xxd -e -c 4 -g 4 main.bin
