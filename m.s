@@ -2,13 +2,15 @@
 # Label : Any word ending with a : is a label
 # directives : anything staing with .
 _start:
-    addi x1, x0, 2
-    addi x2, x0, 5
-    addi x3, x0, 0
-    j addLoop
+    li sp, 0x80002000
+    jal siddhant
+    addi a2, x0, 5
+    addi a3, x0, 2
+    addi a4, x0, 0
+    jal _addLoop
     j .
     
-addLoop:
-    add x3, x3, x1
-    addi x2, x2, -1
-    bnez x2, addLoop
+_addLoop:
+    add a4, a4, a2
+    addi a3, a3, -1
+    bnez a3, _addLoop

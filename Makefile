@@ -1,6 +1,10 @@
 hello:
 	echo "Hi from Siddhant"
 
+c_code: c-asm.c m.s
+	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld m.s c-asm.c -o main.elf
+	riscv64-unknown-elf-objcopy -O binary main.elf main.bin
+
 main: m.s m.ld
 	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld m.s -o main.elf
 	riscv64-unknown-elf-objcopy -O binary main.elf main.bin
